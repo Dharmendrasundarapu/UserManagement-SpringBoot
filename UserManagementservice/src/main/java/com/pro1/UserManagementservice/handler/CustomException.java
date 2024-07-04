@@ -24,5 +24,16 @@ public class CustomException {
 	        });
 	        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
 	    }
-
+	  @ExceptionHandler(ResourceNotAvailableException.class)
+		    @ResponseStatus(HttpStatus.NOT_FOUND)
+		  public ResponseEntity<?> handleResourceNotAvailable(ResourceNotAvailableException ex){
+			  return new ResponseEntity<>("ResourceNotAvailable",HttpStatus.NOT_FOUND);
+		  }
+	  @ExceptionHandler(NoSuchId.class)
+	    @ResponseStatus(HttpStatus.NOT_FOUND)
+			  public ResponseEntity<?> handleNoSuchId(NoSuchId ns){
+		  return new ResponseEntity<>("No Such Id",HttpStatus.NOT_FOUND);
+	  }
 }
+
+

@@ -1,16 +1,21 @@
 package com.pro1.UserManagementservice.Service;
 
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.pro1.UserManagementservice.Entity.User;
 import com.pro1.UserManagementservice.dto.request.UserRequest;
 import com.pro1.UserManagementservice.dto.response.UserResponse;
+import com.pro1.UserManagementservice.handler.NoSuchId;
+import com.pro1.UserManagementservice.handler.ResourceNotAvailableException;
 import com.pro1.UserManagementservice.repo.UserRepository;
 
 @Service
@@ -41,22 +46,41 @@ public List<UserResponse> findAll() {
 	}
 	return userRespo ;
 }
-
-@Override
-public UserResponse findByEmail(String email) {
-	User user=userRepository.findByEmail(email);
-	UserResponse userResponse=new UserResponse();
-	BeanUtils.copyProperties(user, userResponse);
-	return  userResponse;
+public UserResponse findById(long id) {
+	User user=new User();
+	Optional<User> userOpt=userRepository.findById(id);
+	if(userOpt.isPresent())
+	{
+		user=userOpt.get();
+	}
+	else
+	{
+		throw new NoSuchId("No such Id");
+	}
+	return convertEntityToResponse(user);
 }
 
 @Override
-  public void deleteById(long id) {
+public UserResponse findByEmail(String email) {
+	User user=null;
+	Optional<User> userOpt=userRepository.findByEmail(email);
+	if(userOpt.isPresent()) {
+		user=userOpt.get();
+	}
+	else {
+		throw new ResourceNotAvailableException("Resource not available");
+	}
+	return convertEntityToResponse(user);
+}
+
+@Override
+  public void deleteById(Long id) {
 	 userRepository.deleteById(id);
   }
-
-
-   
-   
-   
+   public UserResponse convertEntityToResponse(User user) {
+	   UserResponse userResponse=new UserResponse();
+	   BeanUtils.copyProperties(user, userResponse);
+	   return userResponse;
+   }
+  
 }

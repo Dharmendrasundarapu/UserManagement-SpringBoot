@@ -10,13 +10,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="USER DATA")
+@Table(name="USER_DATA")
 public class User {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="ID")
-	private long id;
+	private Long id;
 	@Column(name="NAME")
 	private String name;
 	@Column(name="EMAIL")
@@ -30,7 +30,7 @@ public class User {
 		
 	}
 
-	public User(long id,String name,String password,String email,String dob ) {
+	public User(Long id,String name,String password,String email,String dob ) {
 		this.id=id;
 		this.name=name;
 		this.password=password;
@@ -39,11 +39,11 @@ public class User {
 		
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

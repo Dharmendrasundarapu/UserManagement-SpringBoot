@@ -1,6 +1,9 @@
 package com.pro1.UserManagementservice.Service;
 
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.http.ResponseEntity;
 
 import com.pro1.UserManagementservice.Entity.User;
 import com.pro1.UserManagementservice.dto.request.UserRequest;
@@ -10,6 +13,7 @@ public interface UserService {
 	
 	 public UserResponse save(UserRequest UserRequest);
 	 public List<UserResponse> findAll();
+	 public UserResponse findById(long id);
      public UserResponse findByEmail(String email);
-     public void deleteById(long id);
+     public void deleteById(Long id);
 }

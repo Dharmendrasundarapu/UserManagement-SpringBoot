@@ -1,7 +1,7 @@
 package com.pro1.UserManagementservice.dto.request;
 
 public class UserRequest {
-	long id;
+	Long id;
 	String name;
 	String password;
 	String email;
@@ -13,7 +13,7 @@ public UserRequest() {
 		
 	}
 
-	public UserRequest(long id,String name,String password,String email,String dob ) {
+	public UserRequest(Long id,String name,String password,String email,String dob ) {
 		this.id=id;
 		this.name=name;
 		this.password=password;
@@ -22,11 +22,11 @@ public UserRequest() {
 		
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
