@@ -1,6 +1,7 @@
 package com.pro1.UserManagementservice;
 
 import org.springframework.boot.SpringApplication;
+
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication

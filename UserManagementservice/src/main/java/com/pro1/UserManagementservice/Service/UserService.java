@@ -14,6 +14,6 @@ public interface UserService {
 	 public UserResponse save(UserRequest UserRequest);
 	 public List<UserResponse> findAll();
 	 public UserResponse findById(long id);
-     public UserResponse findByEmail(String email);
+     public UserResponse findByEmailAndPassword(String email,String password);
      public void deleteById(Long id);
 }

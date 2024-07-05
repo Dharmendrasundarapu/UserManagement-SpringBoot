@@ -3,7 +3,6 @@ package com.pro1.UserManagementservice.dto.response;
 public class UserResponse {
 	Long id;
 	String name;
-	String password;
 	String email;
 	String dob;
 
@@ -13,10 +12,9 @@ public UserResponse() {
 		
 	}
 
-	public UserResponse(Long id,String name,String password,String email,String dob ) {
+	public UserResponse(Long id,String name,String email,String dob ) {
 		this.id=id;
 		this.name=name;
-		this.password=password;
 		this.email=email;
 		this.dob=dob;
 		
@@ -37,15 +35,6 @@ public UserResponse() {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public String getEmail() {
 		return email;
 	}

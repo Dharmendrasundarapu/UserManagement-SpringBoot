@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.pro1.UserManagementservice.Applicationconstants.Constants;
 import com.pro1.UserManagementservice.Service.UserService;
 import com.pro1.UserManagementservice.dto.request.UserRequest;
 import com.pro1.UserManagementservice.dto.response.UserResponse;
@@ -19,6 +22,7 @@ import com.pro1.UserManagementservice.dto.response.UserResponse;
 @RestController
 @RequestMapping("/reg")
 public class UserControl {
+	
 	@Autowired
     private	UserService userService;
 	
@@ -31,15 +35,10 @@ public class UserControl {
      public List<UserResponse> findAll(){
     	 return userService.findAll();
      }
-     @GetMapping("/email/{email}/{password}")
-     public ResponseEntity<?> findByEmail(@PathVariable String email,@PathVariable String password) {
-    	 UserResponse userResponse=userService.findByEmail(email);
-    	 if( userResponse.getPassword().equals(password)) {
-    		 return  ResponseEntity.ok(userResponse);
-    	 }
-    	 else {
-    		 return  ResponseEntity.status(401).body("Invalid credentials");
-    	 }
+     @PostMapping("/login")
+     public String Login( @RequestParam("email")  String email,@RequestParam("password") String password) {
+    		userService.findByEmailAndPassword(email,password);
+    	    return  "Login Success";
      }
      @PutMapping
      public String updateUserDetails(@RequestBody UserRequest userRequest) {

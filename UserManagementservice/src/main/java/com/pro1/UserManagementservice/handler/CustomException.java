@@ -27,13 +27,24 @@ public class CustomException {
 	  @ExceptionHandler(ResourceNotAvailableException.class)
 		    @ResponseStatus(HttpStatus.NOT_FOUND)
 		  public ResponseEntity<?> handleResourceNotAvailable(ResourceNotAvailableException ex){
-			  return new ResponseEntity<>("ResourceNotAvailable",HttpStatus.NOT_FOUND);
+			  return new ResponseEntity<>(ex.getMessage(),HttpStatus.NOT_FOUND);
 		  }
 	  @ExceptionHandler(NoSuchId.class)
 	    @ResponseStatus(HttpStatus.NOT_FOUND)
-			  public ResponseEntity<?> handleNoSuchId(NoSuchId ns){
-		  return new ResponseEntity<>("No Such Id",HttpStatus.NOT_FOUND);
+			  public ResponseEntity<?> handleNoSuchId(NoSuchId ex){
+		  return new ResponseEntity<>(ex.getMessage(),HttpStatus.NOT_FOUND);
 	  }
-}
+	  @ExceptionHandler(NoEmailAndPassword.class)
+	    @ResponseStatus(HttpStatus.NOT_FOUND)
+	  public ResponseEntity<?> handleNoEmailAndPassword(NoEmailAndPassword ex){
+		  return new ResponseEntity<>(ex.getMessage(),HttpStatus.NOT_FOUND);
+	  }
+	  @ExceptionHandler(UserExists.class)
+	    @ResponseStatus(HttpStatus.NOT_FOUND)
+	  public ResponseEntity<?> handleUserExists(UserExists ex){
+		  return new ResponseEntity<>(ex.getMessage(),HttpStatus.NOT_FOUND);
+	  }
+}      
+
 
 

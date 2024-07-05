@@ -11,6 +11,7 @@ import com.pro1.UserManagementservice.dto.response.UserResponse;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-	public Optional<User> findByEmail(String email);
+	
 
+	public Optional<User> findByEmailAndPassword(String email,String password) ;
 }

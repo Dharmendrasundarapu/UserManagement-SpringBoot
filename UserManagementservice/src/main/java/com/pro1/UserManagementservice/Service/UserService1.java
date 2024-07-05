@@ -8,14 +8,15 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.pro1.UserManagementservice.Applicationconstants.Constants;
 import com.pro1.UserManagementservice.Entity.User;
 import com.pro1.UserManagementservice.dto.request.UserRequest;
 import com.pro1.UserManagementservice.dto.response.UserResponse;
+import com.pro1.UserManagementservice.handler.NoEmailAndPassword;
 import com.pro1.UserManagementservice.handler.NoSuchId;
-import com.pro1.UserManagementservice.handler.ResourceNotAvailableException;
+import com.pro1.UserManagementservice.handler.UserExists;
 import com.pro1.UserManagementservice.repo.UserRepository;
 
 @Service
@@ -25,51 +26,48 @@ public  class UserService1 implements UserService  {
   private UserRepository userRepository;
    
    public UserResponse save(UserRequest UserRequest) {
+	   Optional<User> UserExist=userRepository.findByEmailAndPassword(UserRequest.getEmail(),UserRequest.getPassword());
+	   if(UserExist.isPresent()) {
+		   throw new UserExists(Constants.USER_ALREADY_EXISTS);
+	   }
+	   else {
 	   User user=new User();
 	   BeanUtils.copyProperties(UserRequest, user);
+	   
 	   user=userRepository.save(user);
 	   
 	   UserResponse userResponse =new UserResponse();
 	   BeanUtils.copyProperties(user, userResponse);
 	   return userResponse;
+	   }
 	 
    }
 
 @Override
 public List<UserResponse> findAll() {
-	List<User> user=userRepository.findAll();
-	List<UserResponse> userRespo=new ArrayList<UserResponse>();
-	for(User users:user) {
-		 UserResponse userResponse =new UserResponse();
-		 BeanUtils.copyProperties(users, userResponse);
-		 userRespo.add(userResponse);
+	return  userRepository.findAll().stream().map(this::convertEntityToResponse ).collect(Collectors.toList());
+	
+//	 List<User> user= userRepository.findAll() ;
+//	 List<UserResponse> userrespo=new ArrayList<UserResponse>();
+//	 for(User u:user) {
+//		 UserResponse userResponse=new UserResponse();
+//		 BeanUtils.copyProperties(u, userrespo);
+//		 userrespo.add(userResponse);
+//		 
+//	 }
+//	 return userrespo;
+	 
 	}
-	return userRespo ;
-}
+ 
+
 public UserResponse findById(long id) {
-	User user=new User();
-	Optional<User> userOpt=userRepository.findById(id);
-	if(userOpt.isPresent())
-	{
-		user=userOpt.get();
-	}
-	else
-	{
-		throw new NoSuchId("No such Id");
-	}
+	User user=userRepository.findById(id).orElseThrow(()->new NoSuchId(Constants.INVALID_ID));
 	return convertEntityToResponse(user);
 }
 
 @Override
-public UserResponse findByEmail(String email) {
-	User user=null;
-	Optional<User> userOpt=userRepository.findByEmail(email);
-	if(userOpt.isPresent()) {
-		user=userOpt.get();
-	}
-	else {
-		throw new ResourceNotAvailableException("Resource not available");
-	}
+public UserResponse findByEmailAndPassword(String email,String password) {
+	User user=userRepository.findByEmailAndPassword(email,password).orElseThrow(()->new NoEmailAndPassword(Constants.INAVLID_CREDENTIALS));
 	return convertEntityToResponse(user);
 }
 
