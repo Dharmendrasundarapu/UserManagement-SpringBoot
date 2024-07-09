@@ -8,11 +8,16 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.pro1.UserManagementservice.Applicationconstants.Constants;
 import com.pro1.UserManagementservice.Entity.User;
 import com.pro1.UserManagementservice.dto.request.UserRequest;
+import com.pro1.UserManagementservice.dto.response.OrderResponse;
 import com.pro1.UserManagementservice.dto.response.UserResponse;
 import com.pro1.UserManagementservice.handler.NoEmailAndPassword;
 import com.pro1.UserManagementservice.handler.NoSuchId;
@@ -24,6 +29,8 @@ public  class UserService1 implements UserService  {
 	
    @Autowired
   private UserRepository userRepository;
+   @Autowired
+   private RestTemplate restTemplate;
    
    public UserResponse save(UserRequest UserRequest) {
 	   Optional<User> UserExist=userRepository.findByEmailAndPassword(UserRequest.getEmail(),UserRequest.getPassword());
@@ -70,11 +77,25 @@ public UserResponse findByEmailAndPassword(String email,String password) {
 	User user=userRepository.findByEmailAndPassword(email,password).orElseThrow(()->new NoEmailAndPassword(Constants.INAVLID_CREDENTIALS));
 	return convertEntityToResponse(user);
 }
-
 @Override
   public void deleteById(Long id) {
 	 userRepository.deleteById(id);
   }
+public List<OrderResponse> getUserOrders(String email, String password) {
+    UserResponse userResponse = findByEmailAndPassword(email, password);
+    
+    	
+        String url = "http://localhost:8080/orders/userId/" + userResponse.getId();
+        ResponseEntity<List<OrderResponse>> response = restTemplate.exchange(
+            url,
+            HttpMethod.GET,
+            null,
+            new ParameterizedTypeReference<List<OrderResponse>>() {}
+        );
+        
+        return response.getBody();
+    
+}
    public UserResponse convertEntityToResponse(User user) {
 	   UserResponse userResponse=new UserResponse();
 	   BeanUtils.copyProperties(user, userResponse);

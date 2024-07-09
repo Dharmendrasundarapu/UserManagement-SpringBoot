@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pro1.UserManagementservice.Applicationconstants.Constants;
 import com.pro1.UserManagementservice.Service.UserService;
 import com.pro1.UserManagementservice.dto.request.UserRequest;
+import com.pro1.UserManagementservice.dto.response.OrderResponse;
 import com.pro1.UserManagementservice.dto.response.UserResponse;
 
 @RestController
@@ -36,9 +37,9 @@ public class UserControl {
     	 return userService.findAll();
      }
      @PostMapping("/login")
-     public String Login( @RequestParam("email")  String email,@RequestParam("password") String password) {
-    		userService.findByEmailAndPassword(email,password);
-    	    return  "Login Success";
+     public List<OrderResponse> Login( @RequestParam("email")  String email,@RequestParam("password") String password) {
+    	 return  userService.getUserOrders(email,password);
+    	    
      }
      @PutMapping
      public String updateUserDetails(@RequestBody UserRequest userRequest) {
